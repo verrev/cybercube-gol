@@ -4,15 +4,21 @@ import PropTypes from "prop-types";
 const propTypes = {
   setCanvasRef: PropTypes.func.isRequired,
   canvasWidth: PropTypes.number.isRequired,
-  canvasHeight: PropTypes.number.isRequired
+  canvasHeight: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired
 };
 
-const GameOfLife = ({ setCanvasRef, canvasWidth, canvasHeight }) => {
+const Canvas = ({ setCanvasRef, canvasWidth, canvasHeight, onClick }) => {
   return (
-    <canvas ref={setCanvasRef} width={canvasWidth} height={canvasHeight} />
+    <canvas
+      ref={setCanvasRef}
+      width={canvasWidth}
+      height={canvasHeight}
+      onClick={onClick}
+    />
   );
 };
 
-GameOfLife.propTypes = propTypes;
+Canvas.propTypes = propTypes;
 
-export default GameOfLife;
+export default Canvas;

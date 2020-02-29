@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Canvas from "components/Canvas";
 import {
   initializeGameState,
+  addLivingCells,
   updateGameState,
   drawGameStateToCanvas
 } from "utils/gameOfLifeHelpers";
@@ -27,6 +28,7 @@ class CanvasContainer extends Component {
     );
     this.setCanvasRef = this.setCanvasRef.bind(this);
     this.tick = this.tick.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   componentDidMount() {
@@ -51,13 +53,13 @@ class CanvasContainer extends Component {
     this.canvasRef.style.height = `${this.props.canvasHeight}px`;
   }
 
-  tick(currentTickTime) {
+  tick(currentTickTime, ignoreThrottling = false) {
     requestAnimationFrame(this.tick);
 
     const elapsedTime = currentTickTime - this.previousTickTime;
     const secondsPerFrame = 1000 / this.props.fps;
 
-    if (elapsedTime > secondsPerFrame) {
+    if (elapsedTime > secondsPerFrame || ignoreThrottling) {
       this.previousTickTime = currentTickTime - (elapsedTime % secondsPerFrame);
       drawGameStateToCanvas(
         this.canvasRef,
@@ -69,12 +71,23 @@ class CanvasContainer extends Component {
     }
   }
 
+  onClick(clickEvent) {
+    const {
+      gameState,
+      canvasRef,
+      props: { cellSize }
+    } = this;
+    addLivingCells(gameState, cellSize, clickEvent, canvasRef);
+    requestAnimationFrame(currentTickTime => this.tick(currentTickTime, true));
+  }
+
   render() {
     return (
       <Canvas
         setCanvasRef={this.setCanvasRef}
         canvasWidth={this.props.canvasWidth * 2}
         canvasHeight={this.props.canvasHeight * 2}
+        onClick={this.onClick}
       />
     );
   }

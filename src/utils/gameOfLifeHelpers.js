@@ -15,6 +15,43 @@ export const initializeGameState = (canvasWidth, canvasHeight, cellsize) => {
   return gameState;
 };
 
+const addRandomLiveNeighbor = (gameState, x, y) => {
+  const possibleIndices = [-2, -1, 0, 0, 1, 2];
+  const r1 =
+    possibleIndices[Math.floor(Math.random() * possibleIndices.length)];
+  const r2 =
+    possibleIndices[Math.floor(Math.random() * possibleIndices.length)];
+  if (
+    r1 >= 0 &&
+    r2 >= 0 &&
+    gameState.length > y + r2 &&
+    gameState[0].length > x + r1
+  ) {
+    gameState[y + r2][x + r1] = true;
+  }
+};
+
+export const addLivingCells = (
+  gameState,
+  cellSize,
+  { pageX: x, pageY: y },
+  { offsetLeft, offsetTop }
+) => {
+  const cellX = Math.trunc((x - offsetLeft) / cellSize);
+  const cellY = Math.trunc((y - offsetTop) / cellSize);
+  if (
+    cellX >= 0 &&
+    cellY >= 0 &&
+    cellX < gameState.length &&
+    cellY < gameState[0].length
+  ) {
+    gameState[cellY][cellX] = true;
+    for (let i = 0; i < 10; ++i) {
+      addRandomLiveNeighbor(gameState, cellX, cellY);
+    }
+  }
+};
+
 const willTheCellLive = (gameState, x, y) => {
   const liveNeighborCount = getLiveNeighborCount(gameState, x, y);
   const isCellAlive = gameState[x][y];
