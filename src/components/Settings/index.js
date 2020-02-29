@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { Form, Field, ErrorMessage } from "formik";
+import { FormattedMessage } from "react-intl";
 
 const propTypes = {
   isSubmitting: PropTypes.bool,
@@ -16,7 +17,7 @@ const Settings = ({ isSubmitting, initialState }) => (
       </Fragment>
     ))}
     <button type="submit" disabled={isSubmitting}>
-      Apply
+      <FormattedMessage id="settings.apply" />
     </button>
   </Form>
 );
