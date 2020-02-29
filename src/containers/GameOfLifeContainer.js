@@ -1,18 +1,33 @@
-import React, { Component } from "react";
+import React, { useState, useCallback } from "react";
 import CanvasContainer from "containers/CanvasContainer";
+import SettingsContainer from "containers/SettingsContainer";
+import initialState from "consts/initialState";
 
-class GameOfLifeContainer extends Component {
-  componentDidMount() {}
-  render() {
-    return (
+const GameOfLifeContainer = () => {
+  const [canvasWidth, setCanvasWidth] = useState(initialState.canvasWidth);
+  const [canvasHeight, setCanvasHeight] = useState(initialState.canvasHeight);
+  const [cellSize, setCellSize] = useState(initialState.cellSize);
+  const [fps, setFps] = useState(initialState.fps);
+
+  const onSubmit = useCallback((values, { setSubmitting }) => {
+    setCanvasWidth(values.canvasWidth);
+    setCanvasHeight(values.canvasHeight);
+    setCellSize(values.cellSize);
+    setFps(values.fps);
+    setSubmitting(false);
+  }, []);
+
+  return (
+    <>
       <CanvasContainer
-        canvasWidth={500}
-        canvasHeight={500}
-        cellSize={10}
-        fps={1}
+        canvasWidth={canvasWidth}
+        canvasHeight={canvasHeight}
+        cellSize={cellSize}
+        fps={fps}
       />
-    );
-  }
-}
+      <SettingsContainer onSubmit={onSubmit} initialState={initialState} />
+    </>
+  );
+};
 
 export default GameOfLifeContainer;

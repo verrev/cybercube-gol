@@ -36,30 +36,43 @@ class CanvasContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    const {
+      canvasWidth: prevCanvasWidth,
+      canvasHeight: prevCanvasHeight,
+      cellSize: prevCellSize
+    } = prevProps;
+    const { canvasWidth, canvasHeight, cellSize } = this.props;
+
     if (
-      prevProps.canvasWidth !== this.props.canvasWidth ||
-      prevProps.canvasHeight !== this.props.canvasHeight
+      prevCanvasWidth !== canvasWidth ||
+      prevCanvasHeight !== canvasHeight ||
+      prevCellSize !== cellSize
     ) {
-      this.canvasRef.style.width = `${this.props.canvasWidth}px`;
-      this.canvasRef.style.height = `${this.props.canvasHeight}px`;
+      this.initializeCanvas();
+      this.gameState = initializeGameState(canvasWidth, canvasHeight, cellSize);
     }
   }
 
   setCanvasRef(canvasRef) {
     this.canvasRef = canvasRef;
-    this.canvasContext = canvasRef.getContext("2d");
+    this.initializeCanvas();
+  }
+
+  initializeCanvas() {
+    this.canvasContext = this.canvasRef.getContext("2d");
+    this.canvasContext.setTransform(1, 0, 0, 1, 0, 0);
     this.canvasContext.scale(2, 2);
     this.canvasRef.style.width = `${this.props.canvasWidth}px`;
     this.canvasRef.style.height = `${this.props.canvasHeight}px`;
   }
 
-  tick(currentTickTime, ignoreThrottling = false) {
+  tick(currentTickTime) {
     requestAnimationFrame(this.tick);
 
     const elapsedTime = currentTickTime - this.previousTickTime;
     const secondsPerFrame = 1000 / this.props.fps;
 
-    if (elapsedTime > secondsPerFrame || ignoreThrottling) {
+    if (elapsedTime > secondsPerFrame) {
       this.previousTickTime = currentTickTime - (elapsedTime % secondsPerFrame);
       drawGameStateToCanvas(
         this.canvasRef,
@@ -75,10 +88,13 @@ class CanvasContainer extends Component {
     const {
       gameState,
       canvasRef,
+      canvasContext,
       props: { cellSize }
     } = this;
     addLivingCells(gameState, cellSize, clickEvent, canvasRef);
-    requestAnimationFrame(currentTickTime => this.tick(currentTickTime, true));
+    requestAnimationFrame(() =>
+      drawGameStateToCanvas(canvasRef, canvasContext, gameState, cellSize)
+    );
   }
 
   render() {

@@ -42,8 +42,8 @@ export const addLivingCells = (
   if (
     cellX >= 0 &&
     cellY >= 0 &&
-    cellX < gameState.length &&
-    cellY < gameState[0].length
+    cellY < gameState.length &&
+    cellX < gameState[0].length
   ) {
     gameState[cellY][cellX] = true;
     for (let i = 0; i < 10; ++i) {
@@ -107,13 +107,13 @@ export const drawGameStateToCanvas = (
   canvasRef,
   canvasContext,
   gameState,
-  cellsize
+  cellSize
 ) => {
   canvasContext.clearRect(0, 0, canvasRef.width, canvasRef.height);
   for (let i = 0; i < gameState[0].length; ++i) {
     for (let j = 0; j < gameState.length; ++j) {
       if (gameState[j][i]) {
-        canvasContext.fillRect(i * cellsize, j * cellsize, cellsize, cellsize);
+        canvasContext.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
       }
     }
   }
