@@ -1,31 +1,30 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import CanvasContainer from "containers/CanvasContainer";
 import SettingsContainer from "containers/SettingsContainer";
-import initialState from "consts/initialState";
 
 const GameOfLifeContainer = () => {
-  const [canvasWidth, setCanvasWidth] = useState(initialState.canvasWidth);
-  const [canvasHeight, setCanvasHeight] = useState(initialState.canvasHeight);
-  const [cellSize, setCellSize] = useState(initialState.cellSize);
-  const [fps, setFps] = useState(initialState.fps);
+  const [fps, setFps] = useState(1);
 
-  const onSubmit = useCallback((values, { setSubmitting }) => {
-    setCanvasWidth(values.canvasWidth);
-    setCanvasHeight(values.canvasHeight);
-    setCellSize(values.cellSize);
-    setFps(values.fps);
-    setSubmitting(false);
+  const [screenDimensions, setScreenDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
+
+  const onResize = useCallback(
+    ({ target: { innerWidth: width, innerHeight: height } }) =>
+      setScreenDimensions({ width, height }),
+    [setScreenDimensions]
+  );
+
+  useEffect(() => {
+    addEventListener("resize", onResize);
+    return () => removeEventListener("resize", onResize);
   }, []);
 
   return (
     <>
-      <CanvasContainer
-        canvasWidth={canvasWidth}
-        canvasHeight={canvasHeight}
-        cellSize={cellSize}
-        fps={fps}
-      />
-      <SettingsContainer onSubmit={onSubmit} initialState={initialState} />
+      <CanvasContainer screenDimensions={screenDimensions} fps={fps} />
+      <SettingsContainer fps={fps} setFps={setFps} />
     </>
   );
 };

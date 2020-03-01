@@ -1,7 +1,11 @@
-export const initializeGameState = (canvasWidth, canvasHeight, cellsize) => {
+export const initializeGameState = ({
+  canvasWidth,
+  canvasHeight,
+  cellSize
+}) => {
   const gameState = [];
-  const columnCount = canvasWidth / cellsize;
-  const rowCount = canvasHeight / cellsize;
+  const columnCount = canvasWidth / cellSize;
+  const rowCount = canvasHeight / cellSize;
 
   for (let i = 0; i < columnCount; ++i) {
     for (let j = 0; j < rowCount; ++j) {
@@ -90,14 +94,14 @@ const getLiveNeighborCount = (gameState, x, y) => {
 export const updateGameState = gameState => {
   for (let i = 0; i < gameState[0].length; ++i) {
     for (let j = 0; j < gameState.length; ++j) {
-      const nextValue = willTheCellLive(gameState, i, j);
-      gameState[i][j] = { currValue: gameState[i][j], nextValue };
+      const nextValue = willTheCellLive(gameState, j, i);
+      gameState[j][i] = { currValue: gameState[j][i], nextValue };
     }
   }
   for (let i = 0; i < gameState[0].length; ++i) {
     for (let j = 0; j < gameState.length; ++j) {
-      if (typeof gameState[i][j] === "object") {
-        gameState[i][j] = gameState[i][j].nextValue;
+      if (typeof gameState[j][i] === "object") {
+        gameState[j][i] = gameState[j][i].nextValue;
       }
     }
   }
@@ -118,3 +122,10 @@ export const drawGameStateToCanvas = (
     }
   }
 };
+
+export const getCanvasDimensions = screenDimensions => ({
+  canvasWidth:
+    screenDimensions.width - 10 - ((screenDimensions.width - 10) % 100),
+  canvasHeight:
+    screenDimensions.height - 100 - ((screenDimensions.height - 100) % 100)
+});

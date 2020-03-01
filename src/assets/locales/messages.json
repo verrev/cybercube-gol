@@ -1,11 +1,20 @@
 {
   "en-EE": {
-    "settings.apply": "Apply"
+    "menu.link.home": "Home",
+    "menu.link.about": "About the Game of Life",
+    "menu.link.technical": "Technical information",
+    "fps.label": "Simulation speed"
   },
   "et-EE": {
-    "settings.apply": "Uuenda"
+    "menu.link.home": "Pealeht",
+    "menu.link.about": "Game of Life'st",
+    "menu.link.technical": "Tehniline informatsioon",
+    "fps.label": "Simulatsiooni kiirus"
   },
   "ru-EE": {
-    "settings.apply": "Подать заявление"
+    "menu.link.home": "Домашняя страница",
+    "menu.link.about": "Об Game of Life",
+    "menu.link.technical": "Техническая информация",
+    "fps.label": "Скорость симуляции"
   }
 }

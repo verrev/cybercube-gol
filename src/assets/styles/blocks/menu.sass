@@ -1,0 +1,65 @@
+@import '../../var.sass'
+
+.menu
+  display: flex
+  justify-content: space-between
+  padding: 16px
+
+  &__links
+    display: flex
+
+    &-item
+      margin: 8px
+      text-decoration: none
+      font-size: 18px
+      color: $color-primary
+
+      &--active
+        color: $color-accent
+
+  &__languages
+    display: flex
+    justify-content: center
+
+    &-item
+      background: none
+      border: none
+      cursor: pointer
+      width: 32px
+      height: 32px
+      padding: 0
+      margin: 0 8px
+      outline: none
+
+
+      &--en-EE
+        background: url('../../images/us.svg') no-repeat center
+
+      &--et-EE
+        background: url('../../images/ee.svg') no-repeat center
+
+      &--ru-EE
+        background: url('../../images/ru.svg') no-repeat center
+
+      &--selected
+        border-radius: 50%
+        border: 1px dashed $color-primary
+
+@media only screen and (max-width: $breakpoint-desktop)
+  .menu
+    display: block
+
+    &__links
+      justify-content: center
+
+    &__languages
+      margin-top: 8px
+
+@media only screen and (max-width: $breakpoint-handheld)
+  .menu
+    &__links
+      text-align: center
+      display: block
+
+      &-item
+        display: block

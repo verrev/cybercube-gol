@@ -15,6 +15,12 @@ module.exports = {
       {
         test: /\.sass$/i,
         use: ["style-loader", "css-loader", "sass-loader"]
+      },
+      {
+        test: /\.svg/i,
+        use: {
+          loader: "svg-url-loader"
+        }
       }
     ]
   },
@@ -22,5 +28,8 @@ module.exports = {
   resolve: {
     modules: [path.resolve(__dirname, "./src"), "node_modules"],
     extensions: [".js", ".json"]
+  },
+  devServer: {
+    historyApiFallback: true
   }
 };

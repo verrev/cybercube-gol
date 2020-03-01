@@ -1,0 +1,80 @@
+@import '../../var.sass'
+
+.override-slider
+  &
+    input[type=range]
+      -webkit-appearance: none
+      width: 100%
+      background: transparent
+
+    input[type=range]::-webkit-slider-thumb
+      -webkit-appearance: none
+
+    input[type=range]:focus
+      outline: none
+
+    input[type=range]::-ms-track
+      width: 100%
+      cursor: pointer
+      background: transparent
+      border-color: transparent
+      color: transparent
+
+    input[type=range]::-webkit-slider-thumb
+      -webkit-appearance: none
+      border: 1px solid $color-primary
+      height: 24px
+      width: 24px
+      border-radius: 50%
+      background: $color-secondary
+      cursor: pointer
+      margin-top: -8px
+
+    input[type=range]::-moz-range-thumb
+      border: 1px solid #000000
+      height: 24px
+      width: 24px
+      border-radius: 50%
+      background: $color-secondary
+      cursor: pointer
+
+    input[type=range]::-ms-thumb
+      border: 1px solid #000000
+      height: 24px
+      width: 24px
+      border-radius: 50%
+      background: $color-secondary
+      cursor: pointer
+
+    input[type=range]::-webkit-slider-runnable-track
+      width: 100%
+      height: 8.4px
+      cursor: pointer
+      background: $color-accent
+      border-radius: 2px
+
+    input[type=range]::-moz-range-track
+      width: 100%
+      height: 8.4px
+      cursor: pointer
+      background: $color-accent
+      border-radius: 2px
+
+    input[type=range]::-ms-track
+      width: 100%
+      height: 8.4px
+      cursor: pointer
+      background: transparent
+      border-color: transparent
+      border-width: 16px 0
+      color: transparent
+
+    input[type=range]::-ms-fill-lower
+      border-radius: 2.6px
+
+    input[type=range]:focus::-ms-fill-lower
+      background: $color-accent
+
+    input[type=range]::-ms-fill-upper
+      background: $color-accent
+      border-radius: 2.6px

@@ -1,25 +1,28 @@
-import React, { Fragment } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { Form, Field, ErrorMessage } from "formik";
 import { FormattedMessage } from "react-intl";
+import "assets/styles/blocks/settings.sass";
+import "assets/styles/blocks/override-slider.sass";
 
 const propTypes = {
-  isSubmitting: PropTypes.bool,
-  initialState: PropTypes.object.isRequired
+  fps: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
-const Settings = ({ isSubmitting, initialState }) => (
-  <Form>
-    {Object.keys(initialState).map(fieldName => (
-      <Fragment key={fieldName}>
-        <Field type="number" name={fieldName} />
-        <ErrorMessage name={fieldName} component="div" />
-      </Fragment>
-    ))}
-    <button type="submit" disabled={isSubmitting}>
-      <FormattedMessage id="settings.apply" />
-    </button>
-  </Form>
+const Settings = ({ fps, onChange }) => (
+  <div className="settings override-slider">
+    <div className="settings__fps-label">
+      <FormattedMessage id="fps.label" />
+    </div>
+    <input
+      className="settings__fps-slider"
+      type="range"
+      min="1"
+      max="100"
+      value={fps}
+      onChange={onChange}
+    />
+  </div>
 );
 
 Settings.propTypes = propTypes;
