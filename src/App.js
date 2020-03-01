@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import { IntlProvider } from "react-intl";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import MenuContainer from "containers/MenuContainer";
+import TextPageContainer from "containers/TextPageContainer";
 import GameOfLifeContainer from "containers/GameOfLifeContainer";
 import messages from "assets/locales/messages.json";
 import "assets/index.sass";
-
-const About = () => <div>About</div>;
-const Technical = () => <div>Technical</div>;
 
 const App = () => {
   const [locale, setLocale] = useState(navigator.language);
@@ -27,10 +25,10 @@ const App = () => {
         <MenuContainer setLocale={setLocale} />
         <Switch>
           <Route path="/about" exact>
-            <About />
+            <TextPageContainer pageName="about" />
           </Route>
           <Route path="/technical" exact>
-            <Technical />
+            <TextPageContainer pageName="technical" />
           </Route>
           <Route>
             <GameOfLifeContainer />
