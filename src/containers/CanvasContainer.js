@@ -21,8 +21,9 @@ class CanvasContainer extends Component {
     this.canvasRef = createRef();
     this.canvasWrapperRef = createRef();
     this.canvasContext = null;
-    this.previousTickTime = performance.now();
-    this.isRunning = true;
+    this.state = {
+      previousTickTime: performance.now()
+    };
 
     this.setCanvasRef = this.setCanvasRef.bind(this);
     this.setCanvasWrapperRef = this.setCanvasWrapperRef.bind(this);
@@ -52,32 +53,27 @@ class CanvasContainer extends Component {
   }
 
   componentWillUnmount() {
-    this.isRunning = false;
+    this.tick = () => {};
   }
 
   setCanvasRef(canvasRef) {
-    if (!this.isRunning) {
-      return;
-    }
     this.canvasRef = canvasRef;
   }
 
   setCanvasWrapperRef(canvasWrapperRef) {
-    if (!this.isRunning) {
-      return;
-    }
     this.canvasWrapperRef = canvasWrapperRef;
   }
 
   tick(currentTickTime) {
-    if (this.isRunning) {
-      requestAnimationFrame(this.tick);
-    }
-    const elapsedTime = currentTickTime - this.previousTickTime;
+    requestAnimationFrame(this.tick);
+
+    const elapsedTime = currentTickTime - this.state.previousTickTime;
     const secondsPerFrame = 1000 / this.props.fps;
 
     if (elapsedTime > secondsPerFrame) {
-      this.previousTickTime = currentTickTime - (elapsedTime % secondsPerFrame);
+      this.setState({
+        previousTickTime: currentTickTime - (elapsedTime % secondsPerFrame)
+      });
       drawGameStateToCanvas(
         this.canvasRef,
         this.canvasContext,

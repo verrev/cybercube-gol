@@ -18,7 +18,7 @@ const Settings = ({ fps, onChange }) => (
       className="settings__fps-slider"
       type="range"
       min="1"
-      max="100"
+      max="60"
       value={fps}
       onChange={onChange}
     />
