@@ -1,71 +1,58 @@
 import React, { Component, createRef } from "react";
 import PropTypes from "prop-types";
-import GameBoard from "components/GameBoard";
+import Canvas from "components/Canvas";
 import {
   initializeGameState,
   addLivingCells,
   updateGameState,
-  drawGameStateToCanvas,
-  getCanvasDimensions
+  drawGameStateToCanvas
 } from "utils/gameOfLifeHelpers";
 
 const propTypes = {
-  fps: PropTypes.number.isRequired,
-  screenDimensions: PropTypes.object.isRequired
+  fps: PropTypes.number.isRequired
 };
 
-class GameBoardContainer extends Component {
+class CanvasContainer extends Component {
+  static CELL_SIZE = 10;
+
   constructor(props) {
     super(props);
 
-    this.state = {
-      ...getCanvasDimensions(props.screenDimensions),
-      cellSize: 10
-    };
-
     this.canvasRef = createRef();
+    this.canvasWrapperRef = createRef();
     this.canvasContext = null;
     this.previousTickTime = performance.now();
     this.isRunning = true;
 
     this.setCanvasRef = this.setCanvasRef.bind(this);
+    this.setCanvasWrapperRef = this.setCanvasWrapperRef.bind(this);
     this.tick = this.tick.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.onResize = this.onResize.bind(this);
   }
 
   componentDidMount() {
-    this.gameState = initializeGameState(this.state);
+    this.canvasContext = this.canvasRef.getContext("2d");
+    this.canvasRef.onselectstart = () => false;
+    this.onResize();
     requestAnimationFrame(this.tick);
+    addEventListener("resize", this.onResize);
+  }
+
+  onResize() {
+    this.canvasRef.removeAttribute("width");
+    this.canvasRef.removeAttribute("height");
+    this.canvasRef.setAttribute("width", this.canvasWrapperRef.clientWidth);
+    this.canvasRef.setAttribute("height", this.canvasWrapperRef.clientHeight);
+    this.gameState = initializeGameState(
+      this.canvasWrapperRef.clientWidth,
+      this.canvasWrapperRef.clientHeight,
+      CanvasContainer.CELL_SIZE
+    );
   }
 
   componentWillUnmount() {
     this.isRunning = false;
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const {
-      canvasWidth: prevCanvasWidth,
-      canvasHeight: prevCanvasHeight,
-      cellSize: prevCellSize
-    } = prevState;
-    const { canvasWidth, canvasHeight, cellSize } = this.state;
-    const { screenDimensions: prevScreenDimensions } = prevProps;
-    const { screenDimensions } = this.props;
-
-    if (prevScreenDimensions !== screenDimensions) {
-      this.setState({
-        ...getCanvasDimensions(screenDimensions)
-      });
-    }
-
-    if (
-      prevCanvasWidth !== canvasWidth ||
-      prevCanvasHeight !== canvasHeight ||
-      prevCellSize !== cellSize
-    ) {
-      this.initializeCanvas();
-      this.gameState = initializeGameState(this.state);
-    }
   }
 
   setCanvasRef(canvasRef) {
@@ -73,16 +60,13 @@ class GameBoardContainer extends Component {
       return;
     }
     this.canvasRef = canvasRef;
-    this.initializeCanvas();
   }
 
-  initializeCanvas() {
-    this.canvasContext = this.canvasRef.getContext("2d");
-    this.canvasContext.setTransform(1, 0, 0, 1, 0, 0);
-    this.canvasContext.scale(2, 2);
-    this.canvasRef.style.width = `${this.state.canvasWidth}px`;
-    this.canvasRef.style.height = `${this.state.canvasHeight}px`;
-    this.canvasRef.onselectstart = () => false;
+  setCanvasWrapperRef(canvasWrapperRef) {
+    if (!this.isRunning) {
+      return;
+    }
+    this.canvasWrapperRef = canvasWrapperRef;
   }
 
   tick(currentTickTime) {
@@ -98,37 +82,36 @@ class GameBoardContainer extends Component {
         this.canvasRef,
         this.canvasContext,
         this.gameState,
-        this.state.cellSize
+        CanvasContainer.CELL_SIZE
       );
       updateGameState(this.gameState);
     }
   }
 
   onClick(clickEvent) {
-    const {
-      gameState,
-      canvasRef,
-      canvasContext,
-      state: { cellSize }
-    } = this;
-    addLivingCells(gameState, cellSize, clickEvent, canvasRef);
+    const { gameState, canvasRef, canvasContext } = this;
+    addLivingCells(gameState, CanvasContainer.CELL_SIZE, clickEvent, canvasRef);
     requestAnimationFrame(() =>
-      drawGameStateToCanvas(canvasRef, canvasContext, gameState, cellSize)
+      drawGameStateToCanvas(
+        canvasRef,
+        canvasContext,
+        gameState,
+        CanvasContainer.CELL_SIZE
+      )
     );
   }
 
   render() {
     return (
-      <GameBoard
+      <Canvas
         setCanvasRef={this.setCanvasRef}
-        canvasWidth={this.state.canvasWidth * 2}
-        canvasHeight={this.state.canvasHeight * 2}
+        setCanvasWrapperRef={this.setCanvasWrapperRef}
         onClick={this.onClick}
       />
     );
   }
 }
 
-GameBoardContainer.propTypes = propTypes;
+CanvasContainer.propTypes = propTypes;
 
-export default GameBoardContainer;
+export default CanvasContainer;

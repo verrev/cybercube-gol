@@ -1,11 +1,7 @@
-export const initializeGameState = ({
-  canvasWidth,
-  canvasHeight,
-  cellSize
-}) => {
+export const initializeGameState = (canvasWidth, canvasHeight, cellSize) => {
   const gameState = [];
-  const columnCount = canvasWidth / cellSize;
-  const rowCount = canvasHeight / cellSize;
+  const columnCount = (canvasWidth - (canvasWidth % cellSize)) / cellSize;
+  const rowCount = (canvasHeight - (canvasHeight % cellSize)) / cellSize;
 
   for (let i = 0; i < columnCount; ++i) {
     for (let j = 0; j < rowCount; ++j) {
@@ -20,7 +16,7 @@ export const initializeGameState = ({
 };
 
 const addRandomLiveNeighbor = (gameState, x, y) => {
-  const possibleIndices = [-2, -1, 0, 0, 1, 2];
+  const possibleIndices = [-4, -3, -2, -1, 0, 0, 1, 2, 3, 4];
   const r1 =
     possibleIndices[Math.floor(Math.random() * possibleIndices.length)];
   const r2 =
@@ -122,10 +118,3 @@ export const drawGameStateToCanvas = (
     }
   }
 };
-
-export const getCanvasDimensions = screenDimensions => ({
-  canvasWidth:
-    screenDimensions.width - 10 - ((screenDimensions.width - 10) % 100),
-  canvasHeight:
-    screenDimensions.height - 100 - ((screenDimensions.height - 100) % 100)
-});
