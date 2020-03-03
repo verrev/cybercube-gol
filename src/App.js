@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import MenuContainer from "containers/MenuContainer";
 import TextPageContainer from "containers/TextPageContainer";
 import GameOfLifeContainer from "containers/GameOfLifeContainer";
-import messages from "assets/locales/messages.json";
+import messages from "assets/locales/messages";
 import "assets/index.sass";
 
 const App = () => {

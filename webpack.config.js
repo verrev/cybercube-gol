@@ -21,6 +21,10 @@ module.exports = {
         use: {
           loader: "svg-url-loader"
         }
+      },
+      {
+        test: /\.ico$/,
+        loader: "file-loader?name=[name].[ext]"
       }
     ]
   },
