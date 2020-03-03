@@ -21,15 +21,20 @@ class CanvasContainer extends Component {
     this.canvasRef = createRef();
     this.canvasWrapperRef = createRef();
     this.canvasContext = null;
+    this.isRunning = true;
     this.state = {
-      previousTickTime: performance.now()
+      previousTickTime: performance.now(),
+      isAddingLiveCells: false
     };
 
     this.setCanvasRef = this.setCanvasRef.bind(this);
     this.setCanvasWrapperRef = this.setCanvasWrapperRef.bind(this);
     this.tick = this.tick.bind(this);
-    this.onClick = this.onClick.bind(this);
+    this.onPointerDown = this.onPointerDown.bind(this);
+    this.onPointerMove = this.onPointerMove.bind(this);
+    this.onPointerUp = this.onPointerUp.bind(this);
     this.onResize = this.onResize.bind(this);
+    this.addLiveCells = this.addLiveCells.bind(this);
   }
 
   componentDidMount() {
@@ -53,7 +58,8 @@ class CanvasContainer extends Component {
   }
 
   componentWillUnmount() {
-    this.tick = () => {};
+    this.isRunning = false;
+    removeEventListener("resize", this.onResize);
   }
 
   setCanvasRef(canvasRef) {
@@ -65,6 +71,9 @@ class CanvasContainer extends Component {
   }
 
   tick(currentTickTime) {
+    if (!this.isRunning) {
+      return;
+    }
     requestAnimationFrame(this.tick);
 
     const elapsedTime = currentTickTime - this.state.previousTickTime;
@@ -84,9 +93,16 @@ class CanvasContainer extends Component {
     }
   }
 
-  onClick(clickEvent) {
+  addLiveCells(e) {
     const { gameState, canvasRef, canvasContext } = this;
-    addLivingCells(gameState, CanvasContainer.CELL_SIZE, clickEvent, canvasRef);
+    addLivingCells(
+      gameState,
+      CanvasContainer.CELL_SIZE,
+      e.nativeEvent.touches && e.nativeEvent.touches.length > 0
+        ? e.nativeEvent.touches[0]
+        : e,
+      canvasRef
+    );
     requestAnimationFrame(() =>
       drawGameStateToCanvas(
         canvasRef,
@@ -97,12 +113,29 @@ class CanvasContainer extends Component {
     );
   }
 
+  onPointerDown(downEvent) {
+    this.addLiveCells(downEvent);
+    this.setState({ isAddingLiveCells: true });
+  }
+
+  onPointerUp() {
+    this.setState({ isAddingLiveCells: false });
+  }
+
+  onPointerMove(moveEvent) {
+    if (this.state.isAddingLiveCells) {
+      this.addLiveCells(moveEvent);
+    }
+  }
+
   render() {
     return (
       <Canvas
         setCanvasRef={this.setCanvasRef}
         setCanvasWrapperRef={this.setCanvasWrapperRef}
-        onClick={this.onClick}
+        onPointerDown={this.onPointerDown}
+        onPointerUp={this.onPointerUp}
+        onPointerMove={this.onPointerMove}
       />
     );
   }
