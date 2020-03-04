@@ -1,4 +1,4 @@
-const { updateGameState } = require("../../src/utils/gameOfLifeHelpers");
+const { updateGameState } = require("../../../src/utils/gameOfLifeHelpers");
 
 test("updating the game state must set the next state according to the 4 rules of the Game of Life", () => {
   const gameState = [

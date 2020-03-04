@@ -1,7 +1,7 @@
 const {
   initializeGameState,
   addLivingCells
-} = require("../../src/utils/gameOfLifeHelpers");
+} = require("../../../src/utils/gameOfLifeHelpers");
 
 test("adding a living cell at a coordinate plus maybe random cells must set some cells to live", () => {
   const gameState = initializeGameState(30, 30, 10);

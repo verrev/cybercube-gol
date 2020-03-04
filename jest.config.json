@@ -1,0 +1,8 @@
+{
+  "preset": "jest-puppeteer",
+  "globals": {
+    "URL": "http://localhost:8080",
+    "SCREENSHOTS_PATH": "./tests/screenshots"
+  },
+  "verbose": true
+}

@@ -7,6 +7,14 @@
   },
   "env": {
     "browser": true,
+    "node": true,
     "jest/globals": true
+  },
+  "globals": {
+    "page": true,
+    "browser": true,
+    "context": true,
+    "SCREENSHOTS_PATH": true,
+    "jestPuppeteer": true
   }
 }
