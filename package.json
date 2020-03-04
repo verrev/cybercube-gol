@@ -1,9 +1,10 @@
 {
   "name": "cybercube-gol",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "author": "Vootele Verrev <vootele@verrev.xyz>",
-  "license": "-",
+  "private": true,
+  "license": "UNLICENSED",
   "scripts": {
     "start": "webpack-dev-server",
     "test": "HEADLESS=false SLOWMO=0 jest",
